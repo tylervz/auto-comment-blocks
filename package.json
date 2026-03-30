@@ -127,13 +127,13 @@
         "test": "vscode-test"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.32",
-        "@types/node": "^6.0.40",
+        "@types/mocha": "^10.0.0",
+        "@types/node": "^22",
         "@types/vscode": "^1.110.0",
         "@vscode/test-cli": "^0.0.12",
         "@vscode/test-electron": "^2.5.2",
-        "mocha": "^2.3.3",
-        "typescript": "^2.0.3",
+        "mocha": "^10.0.0",
+        "typescript": "^5.0.3",
         "vscode-test": "^1.6.1"
     }
 }
