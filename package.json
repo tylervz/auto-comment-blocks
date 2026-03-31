@@ -124,7 +124,7 @@
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",
-        "test": "vscode-test"
+        "test": "tsc && vscode-test"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.0",
