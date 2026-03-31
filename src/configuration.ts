@@ -1,6 +1,6 @@
 'use strict';
 
-import { Disposable, ExtensionContext, IndentAction, LanguageConfiguration, OnEnterRule, TextEditor, TextEditorEdit, commands, languages, workspace, } from 'vscode';
+import { Disposable, ExtensionContext, LanguageConfiguration, TextEditor, TextEditorEdit, commands, languages, workspace, } from 'vscode';
 
 import { Rules } from './rules';
 
