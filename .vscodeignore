@@ -3,7 +3,10 @@
 out/test/**
 test/**
 src/**
+**/tsconfig.json
 **/*.map
 .gitignore
 tsconfig.json
 vsc-extension-quickstart.md
+**/*.ts
+**/.vscode-test.*

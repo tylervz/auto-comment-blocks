@@ -16,7 +16,7 @@
         "theme": "dark"
     },
     "engines": {
-        "vscode": "^1.12.0"
+        "vscode": "^1.110.0"
     },
     "keywords": [
         "auto",
@@ -31,7 +31,7 @@
         "*",
         "onCommand:auto-comment-blocks.singleLineBlock"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/extension",
     "contributes": {
         "configuration": {
             "title": "Auto Comment Blocks",
@@ -122,9 +122,12 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "test": "tsc && vscode-test"
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./ && npm run copy-configs",
+        "copy-configs": "cp -r language-configuration out/",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile",
+        "test": "vscode-test"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.0",

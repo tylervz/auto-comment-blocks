@@ -12,9 +12,9 @@ export class Configuration {
   private readonly singleLineBlockCommand: string = 
       "auto-comment-blocks.singleLineBlock";
   private readonly singleLineConfigFile: string = __dirname +
-      "/../../language-configuration/single-line-configuration.json";
+      "/../language-configuration/single-line-configuration.json";
   private readonly multiLineConfigFile: string = __dirname +
-      "/../../language-configuration/multi-line-configuration.json";
+      "/../language-configuration/multi-line-configuration.json";
 
   private readonly singleLineBlockOnEnter: string = "singleLineBlockOnEnter";
   private readonly slashStyleBlocks: string = "slashStyleBlocks";
