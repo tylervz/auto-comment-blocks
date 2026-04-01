@@ -4,7 +4,7 @@ import { Disposable, ExtensionContext, LanguageConfiguration, TextEditor, TextEd
 
 import { Rules } from './rules';
 
-let fs = require('fs');
+import * as fs from 'fs';
 
 export class Configuration {
   
@@ -22,8 +22,8 @@ export class Configuration {
   private readonly semicolonStyleBlocks: string = "semicolonStyleBlocks";
   private readonly disabledLanguages: string = "disabledLanguages";
 
-  private disabledLanguageList: string[] = 
-      this.getConfiguration().get<string[]>(this.disabledLanguages);
+  private disabledLanguageList: string[] =
+      this.getConfiguration().get<string[]>(this.disabledLanguages) || [];
   private singleLineBlocksMap: Map<string, string> = new Map();
 
   private getConfiguration() {
@@ -51,14 +51,14 @@ export class Configuration {
       onEnterRules: []
     };
 
-    if (multiLine) {
+    if (multiLine && langConfig.onEnterRules) {
       langConfig.onEnterRules =
           langConfig.onEnterRules.concat(Rules.multilineEnterRules);
     }
 
     let isOnEnter = this.getConfiguration().get<boolean>(
         this.singleLineBlockOnEnter);
-    if (isOnEnter && singleLineStyle) {
+    if (isOnEnter && singleLineStyle && langConfig.onEnterRules) {
       if (singleLineStyle === '//') {
         langConfig.onEnterRules =
             langConfig.onEnterRules.concat(Rules.slashEnterRules);
@@ -76,7 +76,7 @@ export class Configuration {
 
   private getSingleLineLanguages() {
 
-    let singleLineConfig: Object = JSON.parse(fs.readFileSync(
+    let singleLineConfig: Record<string, string[]> = JSON.parse(fs.readFileSync(
       this.singleLineConfigFile, 'utf-8'));
     let commentStyles = Object.keys(singleLineConfig);
     for (let key of commentStyles) {
@@ -88,16 +88,16 @@ export class Configuration {
     }
     
     // get user-customized langIds for this key and add to the map
-    let customSlashLangs = 
-        this.getConfiguration().get<string[]>(this.slashStyleBlocks);
+    let customSlashLangs =
+        this.getConfiguration().get<string[]>(this.slashStyleBlocks) || [];
     for (let langId of customSlashLangs) {
       if (langId && langId.length > 0) {
         this.singleLineBlocksMap.set(langId, '//');
       }
     }
 
-    let customHashLangs = 
-        this.getConfiguration().get<string[]>(this.hashStyleBlocks);
+    let customHashLangs =
+        this.getConfiguration().get<string[]>(this.hashStyleBlocks) || [];
     for (let langId of customHashLangs) {
       if (langId && langId.length > 0) {
         this.singleLineBlocksMap.set(langId, '#');
@@ -105,7 +105,7 @@ export class Configuration {
     }
 
     let customSemicolonLangs =
-        this.getConfiguration().get<string[]>(this.semicolonStyleBlocks);
+        this.getConfiguration().get<string[]>(this.semicolonStyleBlocks) || [];
     for (let langId of customSemicolonLangs) {
       if (langId && langId.length > 0) {
         this.singleLineBlocksMap.set(langId, ';');
@@ -142,7 +142,7 @@ export class Configuration {
     if (style && textEditor.selection.isEmpty) {
       let line = textEditor.document.lineAt(textEditor.selection.active);
       let isCommentLine = true;
-      var indentRegex: RegExp;
+      var indentRegex: RegExp | undefined;
       if (style === '//' && line.text.search(/^\s*\/\/\s*/) !== -1) {
         indentRegex = /\//;
         if (line.text.search(/^\s*\/\/\/\s*/) !== -1) {
@@ -159,7 +159,7 @@ export class Configuration {
         isCommentLine = false;
       }
 
-      if (!isCommentLine) {
+      if (!isCommentLine || !indentRegex) {
         return;
       }
 
